@@ -1,13 +1,13 @@
 package edu.iis.mto.similarity;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimilarityFinderTest {
+class SimilarityFinderTest {
 
     @Test
-    public void test() {
+    void test() {
         fail("Not yet implemented");
     }
 
