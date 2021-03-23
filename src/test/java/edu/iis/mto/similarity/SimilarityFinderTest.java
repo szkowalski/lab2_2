@@ -9,6 +9,8 @@ import edu.iis.mto.searcher.SequenceSearcher;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.lang.reflect.Field;
+
 class SimilarityFinderTest {
 
     @Test
@@ -44,6 +46,58 @@ class SimilarityFinderTest {
         int [] seq1= {};
         int [] seq2= {};
         assertEquals(1, finder.calculateJackardSimilarity(seq1, seq2));
+    }
+
+    @Test
+    public void zeroInvokesTest() throws NoSuchFieldException, IllegalAccessException {
+        SequenceSearcher searcher = new SequenceSearcher() {
+            private int counter = 0;
+
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                counter++;
+                return null;
+            }
+        };
+
+        SimilarityFinder finder = new SimilarityFinder(searcher);
+
+        int[] seq1 = {};
+        int[] seq2 = {};
+
+        finder.calculateJackardSimilarity(seq1, seq2);
+
+        Field field = searcher.getClass().getDeclaredField("counter");
+        field.setAccessible(true);
+
+        int expectedCount = 0;
+        assertEquals(expectedCount, field.getInt(searcher));
+    }
+
+    @Test
+    public void fourInvokesTest() throws NoSuchFieldException, IllegalAccessException {
+        SequenceSearcher searcher = new SequenceSearcher() {
+            private int counter = 0;
+
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                counter++;
+                return SearchResult.builder().withFound(true).build();
+            }
+        };
+
+        SimilarityFinder finder = new SimilarityFinder(searcher);
+
+        int[] seq1 = {2, 4, 6, 8};
+        int[] seq2 = {1, 2, 3, 4, 5, 6};
+
+        finder.calculateJackardSimilarity(seq1, seq2);
+
+        Field field = searcher.getClass().getDeclaredField("counter");
+        field.setAccessible(true);
+
+        int expectedCount = 4;
+        assertEquals(expectedCount, field.getInt(searcher));
     }
 
 }
