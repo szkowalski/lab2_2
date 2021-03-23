@@ -100,4 +100,28 @@ class SimilarityFinderTest {
         assertEquals(expectedCount, field.getInt(searcher));
     }
 
+    @Test
+    public void argumentOfSearcherTest() throws NoSuchFieldException, IllegalAccessException {
+        SequenceSearcher searcher = new SequenceSearcher() {
+            private int x = 0;
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                x = elem;
+                return SearchResult.builder().withFound(true).build();
+            }
+        };
+
+        SimilarityFinder finder = new SimilarityFinder(searcher);
+
+        int[] seq1 = {0};
+        int[] seq2 = {0, 1, 2, 3, 4, 5, 6};
+
+        finder.calculateJackardSimilarity(seq1, seq2);
+
+        Field field = searcher.getClass().getDeclaredField("x");
+        field.setAccessible(true);
+
+        int expectedX = 0;
+        assertEquals(expectedX, field.getInt(searcher));
+    }
 }
