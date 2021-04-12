@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import edu.iis.mto.searcher.SearchResult;
 import edu.iis.mto.searcher.SequenceSearcher;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
 
